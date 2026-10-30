@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0b101b">
+    <meta name="description" content="معاينة ويب عربية لواجهة هاتف مستوحاة من One UI.">
+    <title>معاينة One UI | S26</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='20' fill='%237e7af7'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='34' fill='white' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="simulator-layout">
+      <main class="device wallpaper-dusk" aria-label="محاكي واجهة الهاتف">
+      <div class="wallpaper"></div>
+      <span class="front-camera" aria-hidden="true"></span>
+      <button class="status-bar" id="open-quick-settings" type="button" aria-label="اسحب لأسفل أو اضغط لفتح الإعدادات السريعة والإشعارات">
+        <span class="status-leading">
+          <time class="status-time" id="status-time" datetime="">12:59</time>
+          <span class="status-notifications" aria-hidden="true">
+            <svg viewBox="0 0 16 16"><circle cx="4" cy="4" r="1.5"/><circle cx="11" cy="4" r="1.5"/><circle cx="4" cy="11" r="1.5"/><circle cx="11" cy="11" r="1.5"/></svg>
+            <svg viewBox="0 0 16 16"><rect x="2.5" y="3" width="11" height="10" rx="2"/><path d="M5 10 7 8l1.5 1.5L11 7"/></svg>
+            <span class="status-dot"></span>
+          </span>
+        </span>
+        <span class="status-icons" aria-label="حالة الهاتف">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9a15 15 0 0 1 18 0M6 12a10 10 0 0 1 12 0m-9 3a5 5 0 0 1 6 0m-3 4h.01" /></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V15M8 19V12M12 19V9M16 19V6M20 19V3" /></svg>
+          <span class="status-battery" role="img" aria-label="البطارية ٥٥ بالمئة"><span>55</span></span>
+        </span>
+      </button>
+
+      <section class="home-screen" id="home-screen">
+        <div class="hero">
+          <div class="home-clock-data" aria-hidden="true">
+            <span id="hero-date"></span>
+            <span id="hero-time"></span>
+          </div>
+          <article class="brief-widget">
+            <span class="brief-icon" aria-hidden="true">☼</span>
+            <h1>مساء الخير</h1>
+            <p>احصل على ملخص شخصي يتغير طوال اليوم.</p>
+            <button type="button" class="brief-action" id="open-brief">ابدأ ملخص الآن</button>
+          </article>
+        </div>
+        <article class="weather-widget" aria-label="الطقس: ٣١ درجة، غائم جزئيًا في القاهرة">
+          <span class="widget-weather-icon" aria-hidden="true">⛅</span>
+          <span class="weather-widget-data"><strong>٣١°</strong><small>القاهرة</small></span>
+          <span class="weather-description">غائم جزئيًا</span>
+        </article>
+
+        <div class="app-grid home-grid" id="home-apps"></div>
+        <div class="home-page-indicator" aria-hidden="true"><span class="is-current"></span><span></span><span></span></div>
+
+        <div class="home-spacer"></div>
+        <button class="search-launch" id="open-search" type="button" aria-label="ابحث عن تطبيق">
+          <span class="google-search-mark" aria-hidden="true">G</span>
+          <span>ابحث في Google</span>
+          <span class="search-tools" aria-hidden="true"><span>●</span><span>◉</span></span>
+        </button>
+        <nav class="dock" aria-label="اختصارات سريعة">
+          <button class="dock-button" data-app="phone" type="button" aria-label="الهاتف"><span class="app-icon icon-phone">☎</span></button>
+          <button class="dock-button" data-app="messages" type="button" aria-label="الرسائل"><span class="app-icon icon-messages">▰</span></button>
+          <button class="dock-button" data-app="chrome" type="button" aria-label="Chrome"><span class="app-icon icon-chrome">◉</span></button>
+          <button class="dock-button" id="open-camera" type="button" aria-label="الكاميرا"><span class="app-icon icon-camera">◉</span></button>
+        </nav>
+      </section>
+
+      <section class="drawer-panel" id="drawer" aria-label="درج التطبيقات" hidden>
+        <div class="drawer-handle" aria-label="اسحب لأسفل للعودة للشاشة الرئيسية"></div>
+        <div class="drawer-heading">
+          <div><p class="eyebrow">مساحة تطبيقاتك</p><h1>التطبيقات</h1></div>
+          <button class="icon-button" id="close-drawer" type="button" aria-label="العودة للرئيسية">✕</button>
+        </div>
+        <label class="app-search">
+          <span aria-hidden="true">⌕</span>
+          <input id="app-search" type="search" placeholder="بحث" autocomplete="off">
+          <span class="app-search-menu" aria-hidden="true">⋮</span>
+        </label>
+        <p class="apps-count" id="apps-count"></p>
+        <div class="app-grid drawer-grid" id="drawer-apps"></div>
+        <div class="empty-state" id="empty-state" hidden>ما لقيناش تطبيق بالاسم ده.</div>
+        <p class="browser-note">على Android يفتح متجر Play الرسمي لتبحث عن الألعاب والتطبيقات وتثبّتها بالطريقة المعتادة؛ يلزم جهاز يدعم Google Play وتأكيد التثبيت من المتجر. التطبيقات التي تثبّتها تكون على الجهاز الحقيقي، ولا تظهر داخل قائمة تطبيقات هذه المحاكاة. في نسخة الويب تفتح صفحة المتجر فقط، ولا تستطيع المحاكاة تثبيت التطبيقات أو Android وOne UI.</p>
+      </section>
+
+      <section class="recents-panel" id="recents-panel" aria-label="التطبيقات الأخيرة" hidden>
+        <div class="recents-heading">
+          <div><p class="eyebrow">تعدد المهام</p><h1>التطبيقات الأخيرة</h1></div>
+          <button class="text-button" id="clear-recents" type="button">إغلاق الكل</button>
+        </div>
+        <div class="recent-apps" id="recent-apps"></div>
+        <p class="recents-empty" id="recents-empty" hidden>مافيش تطبيقات حديثة لسه.</p>
+      </section>
+
+      <section class="quick-settings-panel" id="quick-settings" aria-label="الإعدادات السريعة والإشعارات" hidden>
+        <div class="shade-handle" aria-label="اسحب لأعلى لإغلاق الإشعارات"></div>
+        <div class="shade-status">
+          <span>Jio 4G | Jio</span>
+          <span aria-label="شبكة الهاتف والبطارية">◉ LTE ▮▮ <b>22</b></span>
+        </div>
+        <div class="shade-heading">
+          <div class="shade-time-wrap"><h1 id="shade-time">٩:٤١</h1><p class="eyebrow" id="shade-date">الخميس، ٢٩ أكتوبر</p></div>
+          <button class="icon-button shade-edit-button" id="open-shade-customization" type="button" aria-label="تخصيص الإعدادات السريعة" aria-pressed="false">✎</button>
+          <button class="icon-button shade-power-button" id="shade-power" type="button" aria-label="الطاقة">⏻</button>
+          <button class="icon-button shade-settings-button" id="shade-settings" type="button" aria-label="الإعدادات">⚙</button>
+          <button class="icon-button" id="close-quick-settings" type="button" aria-label="إغلاق الإعدادات السريعة">✕</button>
+        </div>
+        <section class="shade-customization" id="shade-customization" aria-label="تخصيص أزرار الإعدادات السريعة" hidden>
+          <div class="shade-customization-heading">
+            <div><h2>تخصيص الأزرار</h2><p>اختر الأزرار التي تظهر، ورتّبها كما تحب.</p></div>
+            <div class="shade-customization-actions">
+              <button class="text-button" id="reset-shade-customization" type="button">إعادة الضبط</button>
+              <button class="text-button" id="finish-shade-customization" type="button">تم</button>
+            </div>
+          </div>
+          <p class="shade-customization-note">استخدم السهمين لترتيب الأزرار. يظل Wi‑Fi وBluetooth والسطوع ثابتًا في الأعلى.</p>
+          <div class="shade-customization-list" id="shade-customization-list"></div>
+        </section>
+        <section class="media-card" aria-label="مشغل وسائط تجريبي">
+          <div class="media-card-heading"><span>This phone</span><span aria-hidden="true">◴</span></div>
+          <div class="media-track-info"><strong>• Said The Sky</strong><span>♪ Bittersweet Mel</span></div>
+          <div class="media-progress" aria-hidden="true"><span></span><i></i></div>
+          <div class="media-time"><span>02:21</span><span>03:30</span></div>
+          <div class="media-controls" aria-hidden="true"><span>⤨</span><span>◀</span><b>Ⅱ</b><span>▶</span><span>Ａᵣ</span></div>
+        </section>
+        <div class="shade-dashboard">
+          <div class="connectivity-tiles">
+            <button class="quick-tile connectivity-tile is-active" type="button" data-toggle="internet" aria-pressed="true"><span>◉</span><strong>Wi-Fi</strong><small>متصل</small></button>
+            <button class="quick-tile connectivity-tile is-active" type="button" data-toggle="bluetooth" aria-pressed="true"><span>ᛒ</span><strong>Bluetooth</strong><small>مفعّل</small></button>
+          </div>
+          <label class="shade-vertical-slider brightness-vertical">
+            <span aria-hidden="true">☼</span>
+            <input id="brightness-slider" type="range" min="35" max="100" value="100" aria-label="سطوع الشاشة">
+          </label>
+          <div class="shade-vertical-slider volume-vertical" id="volume-indicator" role="progressbar" aria-label="مستوى الصوت في المعاينة" aria-valuemin="0" aria-valuemax="100" aria-valuenow="65">
+            <span aria-hidden="true">♫</span>
+          </div>
+        </div>
+        <div class="quick-tiles" id="quick-tiles">
+          <button class="quick-tile" type="button" data-toggle="dnd" aria-pressed="false"><span>⊖</span><strong>عدم الإزعاج</strong><small>متوقف</small></button>
+          <button class="quick-tile" type="button" data-toggle="flashlight" aria-pressed="false"><span>◉</span><strong>المصباح</strong><small>متوقف</small></button>
+          <button class="quick-tile" type="button" data-toggle="airplane" aria-pressed="false"><span>✈</span><strong>وضع الطيران</strong><small>متوقف</small></button>
+          <button class="quick-tile" type="button" data-toggle="battery" aria-pressed="false"><span>▣</span><strong>توفير البطارية</strong><small>متوقف</small></button>
+          <button class="quick-tile" type="button" data-toggle="location" aria-pressed="true"><span>⌖</span><strong>الموقع</strong><small>مفعّل</small></button>
+          <button class="quick-tile" type="button" data-toggle="mobile-data" aria-pressed="true"><span>↕</span><strong>بيانات الهاتف</strong><small>مفعّلة</small></button>
+          <button class="quick-tile" type="button" data-toggle="hotspot" aria-pressed="false"><span>⌁</span><strong>نقطة الاتصال</strong><small>متوقفة</small></button>
+          <button class="quick-tile" type="button" data-toggle="cast" aria-pressed="false"><span>▣</span><strong>الإرسال</strong><small>متوقف</small></button>
+          <button class="quick-tile" type="button" data-toggle="rotation" aria-pressed="true"><span>⟳</span><strong>التدوير التلقائي</strong><small>مفعّل</small></button>
+          <button class="quick-tile" type="button" data-toggle="nfc" aria-pressed="false"><span>Ｎ</span><strong>NFC</strong><small>متوقف</small></button>
+          <button class="quick-tile" type="button" data-toggle="dark-mode" aria-pressed="false"><span>◐</span><strong>الوضع الداكن</strong><small>متوقف</small></button>
+          <button class="quick-tile" type="button" data-toggle="eye-comfort" aria-pressed="false"><span>◉</span><strong>راحة العين</strong><small>متوقفة</small></button>
+        </div>
+        <div class="shade-section-heading">
+          <h2>الإشعارات</h2>
+          <button class="text-button" id="clear-notifications" type="button">مسح الكل</button>
+        </div>
+        <div class="notification-list" id="notification-list">
+          <article class="notification-card">
+            <span class="notification-icon google-notification">G</span>
+            <div><strong>Google</strong><p>أهلًا بك في معاينة One UI. اضغط ⚙ لاستكشاف الإعدادات.</p><small>الآن</small></div>
+          </article>
+          <article class="notification-card">
+            <span class="notification-icon weather-notification">☀</span>
+            <div><strong>الطقس</strong><p>الطقس صافٍ — ٢٤°</p><small>منذ ٥ دقائق</small></div>
+          </article>
+        </div>
+        <div class="shade-actions">
+          <button class="secondary-button" id="shade-lock" type="button">▣ شاشة القفل</button>
+        </div>
+      </section>
+
+      <section class="system-settings-panel" id="system-settings" aria-label="إعدادات المحاكاة" hidden>
+        <header class="settings-topbar">
+          <button class="icon-button" id="close-system-settings" type="button" aria-label="العودة">‹</button>
+          <span>الإعدادات</span>
+          <button class="icon-button settings-search-button" id="settings-search-button" type="button" aria-label="البحث في الإعدادات">⌕</button>
+        </header>
+        <label class="settings-search" id="settings-search-wrap" hidden>
+          <span aria-hidden="true">⌕</span>
+          <input id="settings-search-input" type="search" placeholder="ابحث في الإعدادات" autocomplete="off">
+        </label>
+        <div class="settings-content" id="settings-content">
+          <div class="settings-intro"><p class="eyebrow">One UI • معاينة ويب</p><h1>إعداداتك</h1><p>إدارة إعدادات المحاكاة. إعدادات الجهاز الحقيقية لا تتأثر.</p></div>
+          <button type="button" class="settings-search-launch" id="settings-search-launch"><span>⌕</span>البحث في الإعدادات</button>
+          <div class="settings-list">
+            <button type="button" class="settings-item" data-setting="network"><span class="settings-symbol settings-network">◉</span><span><strong>الشبكة والإنترنت</strong><small>الإنترنت، وضع الطيران</small></span><b>‹</b></button>
+            <button type="button" class="settings-item" data-setting="connected"><span class="settings-symbol settings-connected">ᛒ</span><span><strong>الأجهزة المتصلة</strong><small>Bluetooth، الاقتران</small></span><b>‹</b></button>
+            <button type="button" class="settings-item" data-setting="apps"><span class="settings-symbol settings-apps">▦</span><span><strong>التطبيقات</strong><small>التطبيقات الافتراضية، الأذونات</small></span><b>‹</b></button>
+            <button type="button" class="settings-item" data-setting="notifications"><span class="settings-symbol settings-notifications">♧</span><span><strong>الإشعارات</strong><small>سجل الإشعارات، عدم الإزعاج</small></span><b>‹</b></button>
+            <button type="button" class="settings-item" data-setting="display"><span class="settings-symbol settings-display">☼</span><span><strong>الشاشة</strong><small>السطوع، المظهر، حجم العرض</small></span><b>‹</b></button>
+            <button type="button" class="settings-item" data-setting="wallpaper"><span class="settings-symbol settings-wallpaper">◈</span><span><strong>الخلفية والنمط</strong><small>الألوان والخلفية</small></span><b>‹</b></button>
+            <button type="button" class="settings-item" data-setting="lock"><span class="settings-symbol settings-lock">▣</span><span><strong>شاشة القفل</strong><small>نمط الساعة، رمز القفل، المعاينة</small></span><b>‹</b></button>
+            <button type="button" class="settings-item" data-setting="security"><span class="settings-symbol settings-security">◇</span><span><strong>الأمان والخصوصية</strong><small>أذونات الكاميرا والموقع</small></span><b>‹</b></button>
+            <button type="button" class="settings-item" data-setting="about"><span class="settings-symbol settings-about">ⓘ</span><span><strong>حول الهاتف</strong><small>One UI 9 — معاينة ويب</small></span><b>‹</b></button>
+          </div>
+        </div>
+        <div class="about-content" id="about-content" hidden>
+          <p class="eyebrow">معلومات المحاكاة</p>
+          <h1>حول الهاتف</h1>
+          <div class="android-version-card"><span>14</span><div><strong>Android 14</strong><small>واجهة ويب تجريبية</small></div></div>
+          <div class="about-details">
+            <div><span>إصدار Android</span><strong>14 (محاكاة)</strong></div>
+            <div><span>رقم الإصدار</span><strong>Web Simulator</strong></div>
+            <div><span>تحديث أمان Android</span><strong>غير متاح — محاكاة</strong></div>
+          </div>
+          <p class="about-disclaimer">هذه معاينة ويب لمظهر مستوحى من One UI 9 وAndroid. ليست نظام Android أصليًا ولا تملك صلاحية تعديل نظام الهاتف أو تثبيت تطبيقاته.</p>
+        </div>
+        <div class="appearance-content" id="wallpaper-content" hidden>
+          <p class="eyebrow">تخصيص المحاكاة</p>
+          <h1>الخلفية والنمط</h1>
+          <p class="subpage-description">اختار خلفية ولونًا يظهرا على الشاشة الرئيسية وشاشة القفل.</p>
+          <h2 class="customization-heading">الخلفيات</h2>
+          <div class="wallpaper-options">
+            <button type="button" class="wallpaper-choice wallpaper-preview-dusk" data-wallpaper="dusk" aria-label="خلفية الشفق"><span>الشفق</span></button>
+            <button type="button" class="wallpaper-choice wallpaper-preview-aurora" data-wallpaper="aurora" aria-label="خلفية الشفق القطبي"><span>الشفق القطبي</span></button>
+            <button type="button" class="wallpaper-choice wallpaper-preview-peach" data-wallpaper="peach" aria-label="خلفية الفجر"><span>الفجر</span></button>
+            <button type="button" class="wallpaper-choice wallpaper-preview-ocean" data-wallpaper="ocean" aria-label="خلفية المحيط"><span>المحيط</span></button>
+          </div>
+          <h2 class="customization-heading">لون الواجهة</h2>
+          <div class="theme-options" aria-label="ألوان الواجهة">
+            <button class="theme-swatch is-selected" type="button" data-theme="violet" aria-label="بنفسجي" aria-pressed="true"><span></span></button>
+            <button class="theme-swatch" type="button" data-theme="blue" aria-label="أزرق" aria-pressed="false"><span></span></button>
+            <button class="theme-swatch" type="button" data-theme="green" aria-label="أخضر" aria-pressed="false"><span></span></button>
+            <button class="theme-swatch" type="button" data-theme="rose" aria-label="وردي" aria-pressed="false"><span></span></button>
+          </div>
+          <button type="button" class="secondary-button preview-lock-button" id="preview-lock-from-wallpaper">معاينة شاشة القفل</button>
+        </div>
+        <div class="lock-settings-content" id="lock-settings-content" hidden>
+          <p class="eyebrow">الشاشة والأمان</p>
+          <h1>شاشة القفل</h1>
+          <p class="subpage-description">غيّر شكل الساعة، وعيّن رمزًا لفتح شاشة القفل التجريبية.</p>
+          <h2 class="customization-heading">شكل الساعة</h2>
+          <div class="lock-clock-options">
+            <button type="button" class="clock-choice is-selected" data-lock-clock="stack" aria-pressed="true"><span class="clock-sample clock-sample-stack">٩:٤١</span><small>كبيرة</small></button>
+            <button type="button" class="clock-choice" data-lock-clock="rounded" aria-pressed="false"><span class="clock-sample clock-sample-rounded">٩:٤١</span><small>مستديرة</small></button>
+            <button type="button" class="clock-choice" data-lock-clock="minimal" aria-pressed="false"><span class="clock-sample clock-sample-minimal">٩:٤١</span><small>بسيطة</small></button>
+          </div>
+          <h2 class="customization-heading">رمز القفل</h2>
+          <p class="pin-status" id="pin-status">مافيش رمز قفل محدد. عيّن رمزًا لفتح شاشة القفل.</p>
+          <form id="pin-form" class="pin-form">
+            <label id="current-pin-field" hidden>الرمز الحالي
+              <input id="current-pin" type="password" inputmode="numeric" pattern="[0-9]{4,8}" minlength="4" maxlength="8" autocomplete="current-password">
+            </label>
+            <label>رمز جديد (٤–٨ أرقام)
+              <input id="new-pin" type="password" inputmode="numeric" pattern="[0-9]{4,8}" minlength="4" maxlength="8" autocomplete="new-password" required>
+            </label>
+            <label>تأكيد الرمز الجديد
+              <input id="confirm-pin" type="password" inputmode="numeric" pattern="[0-9]{4,8}" minlength="4" maxlength="8" autocomplete="new-password" required>
+            </label>
+            <button class="primary-button pin-submit" type="submit">حفظ رمز القفل</button>
+            <button class="secondary-button lock-now-button" id="lock-now" type="button">قفل المحاكاة الآن</button>
+          </form>
+          <p class="pin-disclaimer">رمز PIN مؤقت داخل الصفحة ولا يُحفَظ بعد إعادة تحميلها. هذه حماية شكلية للمحاكاة فقط، وليست حماية لجهازك.</p>
+        </div>
+      </section>
+
+      <section class="app-viewer" id="app-viewer" aria-label="تطبيق داخل الهاتف" hidden>
+        <header class="app-viewer-header">
+          <button class="icon-button" id="close-app-viewer" type="button" aria-label="إغلاق التطبيق">‹</button>
+          <span class="app-viewer-title">
+            <span class="app-viewer-icon" id="app-viewer-icon"></span>
+            <strong id="app-viewer-name">التطبيق</strong>
+          </span>
+          <a class="secondary-button app-viewer-external" id="open-app-external" href="#" target="_blank" rel="noopener noreferrer" aria-label="فتح خارج الهاتف">فتح خارجي ↗</a>
+        </header>
+        <form class="app-viewer-address" id="app-viewer-address" hidden>
+          <input id="app-viewer-url" type="text" inputmode="url" autocomplete="url" placeholder="https://example.com" aria-label="عنوان الموقع">
+          <button class="secondary-button" type="submit">انتقال</button>
+        </form>
+        <p class="app-viewer-notice" id="app-viewer-notice">قد تمنع بعض المواقع العرض داخل المحاكي؛ استخدم زر «فتح خارجي» عندها.</p>
+        <div class="app-viewer-local" id="app-viewer-local" hidden>
+          <span class="app-viewer-local-icon" id="app-viewer-local-icon" aria-hidden="true"></span>
+          <h1 id="app-viewer-local-title"></h1>
+          <p id="app-viewer-local-message"></p>
+          <a class="primary-button app-viewer-local-action" id="app-viewer-local-action" href="#" rel="noopener noreferrer"></a>
+        </div>
+        <iframe class="app-viewer-frame" id="app-viewer-frame" title="محتوى التطبيق" sandbox="allow-forms allow-scripts allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer" allow="camera; microphone; geolocation; fullscreen"></iframe>
+      </section>
+
+      <section class="lock-screen clock-style-stack" id="lock-screen" aria-label="شاشة القفل" hidden>
+        <div class="lock-wallpaper"></div>
+        <div class="lock-screen-status">
+          <span class="lock-carrier">AXIS</span>
+          <span class="lock-status-icons" aria-label="إشارة الشبكة والبطارية">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9a13 13 0 0 1 18 0M6.5 12.5a8 8 0 0 1 11 0M10 16a3 3 0 0 1 4 0M12 19h.01"></path></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 19 12 4l10 15H2Z"></path></svg>
+            <span class="lock-battery">55</span>
+          </span>
+        </div>
+        <button class="lock-emblem" id="lock-screen-dismiss" type="button" aria-label="العودة إلى الشاشة الرئيسية">
+          <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+        </button>
+        <div class="lock-clock-area">
+          <p class="lock-date" id="lock-date"></p>
+          <h1 class="lock-time" id="lock-time"></h1>
+        </div>
+        <div class="lock-notifications"><span aria-hidden="true"></span> Notification Center</div>
+        <div class="lock-widgets" aria-label="أدوات الشاشة">
+          <div class="lock-widget lock-battery-widget"><span class="lock-widget-symbol" aria-hidden="true">▰</span><strong>13%</strong><small>شحن</small></div>
+          <div class="lock-widget"><span class="lock-widget-symbol" aria-hidden="true">●</span><strong>5:38</strong><small>AM</small></div>
+          <div class="lock-widget"><span class="lock-widget-symbol" aria-hidden="true">◷</span><strong>5:00</strong><small>AM</small></div>
+        </div>
+        <div class="lock-app-shortcuts" aria-hidden="true"><span>◉</span><span>◌</span><span>➤</span><span>℗</span></div>
+        <div class="lock-bottom-area">
+          <div class="lock-weather-card">
+            <strong>26°</strong>
+            <span>غائم جزئيًا غدًا. العظمى 34°</span>
+            <small>⌖ القاهرة</small>
+          </div>
+          <div class="lock-weather-art" aria-hidden="true"><span>☾</span><b>☁</b></div>
+        </div>
+        <div class="lock-media-player" aria-label="مشغل موسيقى تجريبي">
+          <span class="lock-album-art" aria-hidden="true">◉</span>
+          <span class="lock-track"><strong>يتم التشغيل الآن</strong><small>موسيقى تجريبية</small></span>
+          <span class="lock-media-controls" aria-hidden="true">◀　Ⅱ　▶</span>
+        </div>
+        <div class="lock-unlock-area">
+          <p class="lock-prompt" id="lock-prompt">أدخل رمز PIN لفتح المحاكاة</p>
+          <div class="pin-dots" id="pin-dots" aria-label="رمز PIN المدخل"></div>
+          <p class="lock-error" id="lock-error" aria-live="polite"></p>
+          <div class="pin-keypad" id="pin-keypad">
+            <button type="button" data-pin-key="1">١</button><button type="button" data-pin-key="2">٢</button><button type="button" data-pin-key="3">٣</button>
+            <button type="button" data-pin-key="4">٤</button><button type="button" data-pin-key="5">٥</button><button type="button" data-pin-key="6">٦</button>
+            <button type="button" data-pin-key="7">٧</button><button type="button" data-pin-key="8">٨</button><button type="button" data-pin-key="9">٩</button>
+            <span></span><button type="button" data-pin-key="0">٠</button><button type="button" data-pin-key="delete" aria-label="حذف آخر رقم">⌫</button>
+          </div>
+          <button type="button" class="primary-button setup-pin-from-lock" id="setup-pin-from-lock" hidden>إعداد رمز القفل</button>
+          <button type="button" class="lock-cancel-button" id="cancel-lock">إلغاء</button>
+        </div>
+        <button class="lock-screen-unlock" id="lock-swipe-to-pin" type="button" aria-label="إظهار لوحة إدخال رمز PIN">
+          <span></span>
+          <small>اسحب لأعلى أو اضغط لإدخال الرمز</small>
+        </button>
+      </section>
+
+      <section class="camera-panel" id="camera-panel" aria-label="الكاميرا" hidden>
+        <div class="camera-header">
+          <button class="icon-button" id="close-camera" type="button" aria-label="إغلاق الكاميرا">✕</button>
+          <span>الكاميرا</span>
+          <span class="camera-live" id="camera-live">● مباشر</span>
+        </div>
+        <video id="camera-preview" autoplay playsinline muted></video>
+        <div class="camera-controls">
+          <button class="camera-switch" id="camera-switch" type="button" aria-label="التبديل إلى الكاميرا الأمامية" disabled>↻ <span>السلفي</span></button>
+          <button class="camera-shutter" id="capture-photo" type="button" aria-label="التقاط صورة" disabled><span></span></button>
+          <span class="camera-controls-spacer" aria-hidden="true"></span>
+        </div>
+        <div class="camera-message" id="camera-message">
+          <span aria-hidden="true">◉</span>
+          <p>اسمح باستخدام الكاميرا لعرض المعاينة على جهازك.</p>
+          <button class="primary-button" id="enable-camera" type="button">تشغيل الكاميرا</button>
+        </div>
+        <canvas id="camera-canvas" hidden></canvas>
+      </section>
+
+      <section class="utility-panel" id="calculator-panel" aria-label="الحاسبة" hidden>
+        <div class="utility-header">
+          <button class="icon-button" id="close-calculator" type="button" aria-label="إغلاق الحاسبة">✕</button>
+          <span>الحاسبة</span>
+          <span class="utility-mark">S26</span>
+        </div>
+        <div class="calculator-display" id="calculator-display" aria-live="polite">٠</div>
+        <div class="calculator-keys" id="calculator-keys">
+          <button type="button" data-calculator="clear" class="key-muted">مسح</button>
+          <button type="button" data-calculator="delete" class="key-muted">⌫</button>
+          <button type="button" data-calculator="operator" data-value="(" class="key-muted">(</button>
+          <button type="button" data-calculator="operator" data-value="/" class="key-operator">÷</button>
+          <button type="button" data-calculator="digit" data-value="7">٧</button>
+          <button type="button" data-calculator="digit" data-value="8">٨</button>
+          <button type="button" data-calculator="digit" data-value="9">٩</button>
+          <button type="button" data-calculator="operator" data-value="*" class="key-operator">×</button>
+          <button type="button" data-calculator="digit" data-value="4">٤</button>
+          <button type="button" data-calculator="digit" data-value="5">٥</button>
+          <button type="button" data-calculator="digit" data-value="6">٦</button>
+          <button type="button" data-calculator="operator" data-value="-" class="key-operator">−</button>
+          <button type="button" data-calculator="digit" data-value="1">١</button>
+          <button type="button" data-calculator="digit" data-value="2">٢</button>
+          <button type="button" data-calculator="digit" data-value="3">٣</button>
+          <button type="button" data-calculator="operator" data-value="+" class="key-operator">+</button>
+          <button type="button" data-calculator="operator" data-value=")" class="key-muted">)</button>
+          <button type="button" data-calculator="digit" data-value="0">٠</button>
+          <button type="button" data-calculator="decimal" class="key-muted">.</button>
+          <button type="button" data-calculator="equals" class="key-equals">=</button>
+        </div>
+      </section>
+
+      <nav class="navigation-bar" aria-label="شريط التنقل">
+        <button class="navigation-button" id="nav-back" type="button" aria-label="رجوع">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+        </button>
+        <button class="navigation-button" id="nav-home" type="button" aria-label="الرئيسية">
+          <span class="home-navigation-icon" aria-hidden="true"></span>
+        </button>
+        <button class="navigation-button" id="nav-recents" type="button" aria-label="التطبيقات الأخيرة">
+          <span class="recents-navigation-icon" aria-hidden="true"></span>
+        </button>
+      </nav>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </main>
+      <aside class="device-side-panel" aria-label="أدوات الهاتف">
+        <button class="side-panel-button side-panel-lock" id="side-lock" type="button" aria-label="قفل الشاشة">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+          <span class="side-button-tooltip">قفل الشاشة</span>
+        </button>
+        <button class="side-panel-button" id="side-volume-up" type="button" aria-label="رفع الصوت">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6l-5 4H4Z"></path><path d="M16 9a5 5 0 0 1 0 6m2.5-8.5a8.5 8.5 0 0 1 0 11"></path><path d="M19 3v6m-3-3h6"></path></svg>
+          <span class="side-button-tooltip">رفع الصوت</span>
+        </button>
+        <button class="side-panel-button" id="side-volume-down" type="button" aria-label="خفض الصوت">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6l-5 4H4Z"></path><path d="M16 9a5 5 0 0 1 0 6m2.5-8.5a8.5 8.5 0 0 1 0 11"></path><path d="M16 18h6"></path></svg>
+          <span class="side-button-tooltip">خفض الصوت</span>
+        </button>
+      </aside>
+      <section class="showcase-copy" aria-label="معاينة واجهة One UI 9">
+        <span class="showcase-kicker">معاينة تصميم</span>
+        <h1>One UI</h1>
+        <div class="showcase-version"><span>9</span><span class="showcase-sparkles" aria-hidden="true">✦<br>✦</span></div>
+        <p>واجهة تنساب مع يومك</p>
+        <small>تصميم تجريبي مستوحى من واجهات الهواتف الحديثة</small>
+      </section>
+    </div>
+    <p class="outside-caption">معاينة ويب مستوحاة من One UI 9 — ليست نظام Android أو واجهة Samsung رسمية</p>
+  </body>
+</html>
